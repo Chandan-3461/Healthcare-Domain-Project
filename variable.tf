@@ -1,4 +1,4 @@
-#Initialize Terraform
+# Initialize Terraform and specify the AWS provider version
 terraform {
   required_providers {
     aws = {
@@ -7,8 +7,10 @@ terraform {
     }
   }
 }
- 
-environment {
-    AWS_SECRET_KEY_ID = credentials('AWS_SECRET_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+
+# AWS Provider Configuration
+provider "aws" {
+  region = "ap-south-1"
+  # Credentials will be automatically picked up from the environment variables:
+  # AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
 }
