@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    environment {
+        AWS_ACCESS_KEY_ID = credentials('AWS_SECRET_KEY_ID') // Replace with the Jenkins credential ID for AWS Access Key
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY') // Replace with the Jenkins credential ID for AWS Secret Key
+    }
     stages {
         stage('Checkout Code') {
             steps {
@@ -30,6 +34,17 @@ pipeline {
             steps {
                 echo 'Pushing Docker image to DockerHub'
                 sh 'docker push chandan3461/healthcare-app:latest'
+            }
+        }
+        stage('Terraform Init and Plan') {
+            steps {
+                sh 'terraform init'
+                sh 'terraform plan'
+            }
+        }
+        stage('Terraform Apply') {
+            steps {
+                sh 'terraform apply -auto-approve'
             }
         }
     }
