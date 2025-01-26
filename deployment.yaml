@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: healthcare-app
+  labels:
+    app: healthcare
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: healthcare
+  template:
+    metadata:
+      labels:
+        app: healthcare
+    spec:
+      containers:
+      - name: healthcare-app
+        image: chandan3461/healthcare-app:latest # Replace with your DockerHub image
+        ports:
+        - containerPort: 8080
+
