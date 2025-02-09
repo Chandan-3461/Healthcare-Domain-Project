@@ -1,8 +1,7 @@
 pipeline {
     agent any
     environment {
-        AWS_ACCESS_KEY_ID = credentials('AWS_SECRET_KEY_ID') // Replace with the Jenkins credential ID for AWS Access Key
-        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY') // Replace with the Jenkins credential ID for AWS Secret Key
+        DOCKER_IMAGE = "chandan3461/healthcare-app:latest"
     }
     stages {
         stage('Checkout Code') {
@@ -36,17 +35,14 @@ pipeline {
                 sh 'docker push chandan3461/healthcare-app:latest'
             }
         }
-        stage('Terraform Init and Plan') {
+        stage('Deploy to Kubernetes') {
             steps {
-                sh 'terraform init'
-                sh 'terraform plan'
-            }
-        }
-        stage('Terraform Apply') {
-            steps {
-                sh 'terraform apply -auto-approve'
+                sh '''
+                    kubectl apply -f namespace.yaml
+                    kubectl apply -f deployment.yaml
+                    kubectl apply -f service.yaml
+                '''
             }
         }
     }
 }
-
